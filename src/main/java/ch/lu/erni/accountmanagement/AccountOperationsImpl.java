@@ -17,7 +17,7 @@ public class AccountOperationsImpl implements AccountOperations{
 
 
     @Override
-    public void deposit(BigDecimal amount) {
+    public synchronized void deposit(BigDecimal amount) {
         BigDecimal currentAmount = account.getCurrentAmount();
         BigDecimal newCurrentAmount = currentAmount.add(amount);
 
@@ -25,7 +25,7 @@ public class AccountOperationsImpl implements AccountOperations{
     }
 
     @Override
-    public void withdraw(BigDecimal amount) {
+    public synchronized void withdraw(BigDecimal amount) {
         BigDecimal currentAmount = account.getCurrentAmount();
         BigDecimal newCurrentAmount = currentAmount.subtract(amount);
 
@@ -33,8 +33,9 @@ public class AccountOperationsImpl implements AccountOperations{
     }
 
     @Override
-    public void transact(BigDecimal amount, Account goalAccount) {
-
+    public synchronized void transact(BigDecimal amount, Account goalAccount) {
+        this.withdraw(amount);
+        new AccountOperationsImpl(goalAccount).deposit(amount);
     }
 
     @Override
