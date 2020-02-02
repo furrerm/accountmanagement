@@ -8,15 +8,15 @@ public interface AccountOperations {
 
     /**
      * Is used to pay in money
-     * @Param The amount which is paied in
+     * @Param The amount which is paid in
      */
-    void deposit(BigDecimal amount);
+    void deposit(Transaction transaction) throws Exception;
 
 
-    void withdraw(BigDecimal amount);
+    void withdraw(Transaction transaction) throws Exception;
 
 
-    void transact(BigDecimal amount, Account goalAccount);
+    void transact(Transaction transaction, Account goalAccount) throws Exception;
 
     BigDecimal getCurrentStock();
 }
