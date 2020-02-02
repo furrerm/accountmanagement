@@ -14,4 +14,10 @@ public class AccountImpl implements Account{
     public BigDecimal getCurrentAmount() {
         return currentAmount;
     }
+
+    @Override
+    public void setCurrentAmount(BigDecimal currentAmount) {
+        this.currentAmount = currentAmount;
+    }
+
 }
