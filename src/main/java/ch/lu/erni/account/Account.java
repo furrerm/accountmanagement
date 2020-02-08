@@ -1,5 +1,6 @@
 package ch.lu.erni.account;
 
+import ch.lu.erni.accountmanagement.AccountTransfer;
 import ch.lu.erni.accountmanagement.Transaction;
 
 import java.math.BigDecimal;
@@ -19,9 +20,4 @@ public interface Account {
      */
     void setCurrentAmount(BigDecimal CurrentAmount);
 
-    /**
-     * get the transactions made from this account
-     * @Return all the transactions made fom this account
-     */
-    Map<UUID, Transaction> getTransactions();
 }

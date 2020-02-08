@@ -4,73 +4,45 @@ import ch.lu.erni.account.Account;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 public class AccountOperationsImpl implements AccountOperations {
 
     private int CONSIDERED_DECIMALS = 2;
 
-    private Account account;
+    private Map<UUID, Transaction> transactions = new HashMap<>();
 
-    public AccountOperationsImpl(Account account) {
+    public static AccountOperationsImpl accountOperations;
 
-        this.account = account;
+    private AccountOperationsImpl() {
     }
 
+    public static AccountOperationsImpl getInstance(){
+        return Objects.requireNonNullElseGet(accountOperations, AccountOperationsImpl::new);
+    }
 
-    @Override
-    public synchronized void deposit(Transaction transaction) throws Exception{
-
+    synchronized public boolean transact(Transaction transaction) throws Exception{
         this.saveTransaction(transaction);
-        BigDecimal currentAmount = account.getCurrentAmount();
-        BigDecimal newCurrentAmount = currentAmount.add(transaction.getAmount());
-
-        if(newCurrentAmount.compareTo(new BigDecimal(0)) < 0){
-            throw new Exception("Minus Values are not allowed");
-        }
-
-        account.setCurrentAmount(newCurrentAmount);
+        return transaction.execute();
     }
 
     @Override
-    public synchronized void withdraw(Transaction transaction) throws Exception{
-
-        this.saveTransaction(transaction);
-        BigDecimal currentAmount = account.getCurrentAmount();
-        BigDecimal newCurrentAmount = currentAmount.subtract(transaction.getAmount());
-
-        if(newCurrentAmount.compareTo(new BigDecimal(0)) < 0){
-            throw new Exception("Minus Values are not allowed");
-        }
-
-        account.setCurrentAmount(newCurrentAmount);
-    }
-
-    @Override
-    public synchronized void transact(Transaction transaction, Account goalAccount) throws Exception{
-
-        this.withdraw(transaction);
-        new AccountOperationsImpl(goalAccount).deposit(transaction);
-    }
-
-    @Override
-    public BigDecimal getCurrentStock() {
+    public BigDecimal getCurrentStockOf(Account account) {
 
         return account.getCurrentAmount().setScale(CONSIDERED_DECIMALS, RoundingMode.HALF_UP);
     }
 
-
     private void saveTransaction(Transaction transaction) throws Exception{
 
-        Map<UUID, Transaction> transactions = account.getTransactions();
+
         if(!transactions.containsKey(transaction.getTransactionId())){
-            account.getTransactions().put(transaction.getTransactionId(),transaction);
+            transactions.put(transaction.getTransactionId(),transaction);
         } else {
-            throw new Exception("Transaction already transacted. (Separate Exception should be written)");
+            throw new Exception("Transaction already executed. (Separate Exception should be written)");
         }
-
-
     }
 
 
