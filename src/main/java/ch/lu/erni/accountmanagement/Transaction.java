@@ -15,6 +15,7 @@ public class Transaction {
     private UUID transactionId;
 
     private Transaction(BigDecimal amount, Account initiatingAccount, Account goalAccount) {
+        this.initiatingAccount = initiatingAccount;
         this.goalAccount = goalAccount;
         this.amount = amount;
         this.transactionId = UUID.randomUUID();

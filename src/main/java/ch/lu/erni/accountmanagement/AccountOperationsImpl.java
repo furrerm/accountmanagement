@@ -9,8 +9,9 @@ import java.util.UUID;
 
 public class AccountOperationsImpl implements AccountOperations {
 
-    private Account account;
     private int CONSIDERED_DECIMALS = 2;
+
+    private Account account;
 
     public AccountOperationsImpl(Account account) {
 
@@ -20,8 +21,8 @@ public class AccountOperationsImpl implements AccountOperations {
 
     @Override
     public synchronized void deposit(Transaction transaction) throws Exception{
-        this.saveTransaction(transaction);
 
+        this.saveTransaction(transaction);
         BigDecimal currentAmount = account.getCurrentAmount();
         BigDecimal newCurrentAmount = currentAmount.add(transaction.getAmount());
 
@@ -36,7 +37,6 @@ public class AccountOperationsImpl implements AccountOperations {
     public synchronized void withdraw(Transaction transaction) throws Exception{
 
         this.saveTransaction(transaction);
-
         BigDecimal currentAmount = account.getCurrentAmount();
         BigDecimal newCurrentAmount = currentAmount.subtract(transaction.getAmount());
 
@@ -57,14 +57,13 @@ public class AccountOperationsImpl implements AccountOperations {
     @Override
     public BigDecimal getCurrentStock() {
 
-
         return account.getCurrentAmount().setScale(CONSIDERED_DECIMALS, RoundingMode.HALF_UP);
     }
 
 
     private void saveTransaction(Transaction transaction) throws Exception{
-        Map<UUID, Transaction> transactions = account.getTransactions();
 
+        Map<UUID, Transaction> transactions = account.getTransactions();
         if(!transactions.containsKey(transaction.getTransactionId())){
             account.getTransactions().put(transaction.getTransactionId(),transaction);
         } else {

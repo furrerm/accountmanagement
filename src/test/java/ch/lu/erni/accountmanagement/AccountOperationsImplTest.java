@@ -115,8 +115,6 @@ public class AccountOperationsImplTest {
         Transaction transaction = Transaction.createWithdrawing(new BigDecimal(123.46), account1);
 
         operations.withdraw(transaction);
-
-
     }
 
 

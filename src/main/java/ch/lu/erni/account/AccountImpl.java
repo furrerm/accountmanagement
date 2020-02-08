@@ -10,7 +10,6 @@ import java.util.UUID;
 public class AccountImpl implements Account{
 
     private BigDecimal currentAmount;
-
     private Map<UUID, Transaction> transactions = new HashMap<>();
 
     public AccountImpl(BigDecimal initialAmount){
